@@ -14,7 +14,7 @@
       </div> -->
       <template slot="table-row" slot-scope="props">
         <span
-          style="margin: auto; display: table"
+          style="cursor: pointer; margin: auto; display: table"
           v-if="props.column.field == 'carousel'"
         >
           <i
@@ -134,6 +134,38 @@ export default {
         let component = this;
         let pid = params.row.pid;
         this.$router.push("/edit/" + pid);
+      } else if (params.column.field == "subscription") {
+        let component = this;
+        let pid = {
+          update: "subscription",
+          pid: params.row.pid,
+        };
+        ProductsAPI.updateSubscription(pid).then((response) => {
+          component.getData();
+          this.$bvToast.toast("Subscription updated successfully", {
+            title: "Success",
+            variant: "success",
+            solid: true,
+          });
+        });
+      } else if (params.column.field == "carousel") {
+        let component = this;
+        let pid = {
+          update: "carousel",
+          pid: params.row.pid,
+        };
+        ProductsAPI.updateSubscription(pid)
+          .then((response) => {
+            component.getData();
+            this.$bvToast.toast("Carousel updated successfully", {
+              title: "Success",
+              variant: "success",
+              solid: true,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     },
   },

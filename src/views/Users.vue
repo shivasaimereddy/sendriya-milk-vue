@@ -1,17 +1,37 @@
 <template>
   <div>
-    <vue-good-table :columns="columns" :rows="rows">
+    <vue-good-table
+      :columns="columns"
+      :rows="rows"
+      @on-cell-click="onCellClick"
+    >
       <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field == 'Active'">
+        <span
+          style="cursor: pointer; margin: auto; display: table"
+          v-if="props.column.field == 'Active'"
+        >
           <i
             v-if="props.row.Active"
             class="fas fa-check-circle text-success"
           ></i>
           <i v-else class="fas fa-times-circle text-danger"></i>
         </span>
-        <span v-else-if="props.column.field == 'Admin'">
+        <span
+          style="cursor: pointer; margin: auto; display: table"
+          v-else-if="props.column.field == 'Admin'"
+        >
           <i
             v-if="props.row.Admin"
+            class="fas fa-check-circle text-success"
+          ></i>
+          <i v-else class="fas fa-times-circle text-danger"></i>
+        </span>
+        <span
+          style="cursor: pointer; margin: auto; display: table"
+          v-else-if="props.column.field == 'super_admin'"
+        >
+          <i
+            v-if="props.row.super_admin"
             class="fas fa-check-circle text-success"
           ></i>
           <i v-else class="fas fa-times-circle text-danger"></i>
@@ -53,6 +73,36 @@ export default {
       UsersAPI.getColumns().then((response) => {
         component.columns = response.data;
       });
+    },
+    onCellClick(params) {
+      if (params.column.field == "Active") {
+        let component = this;
+        let data = {
+          update: "active",
+          username: params.row.username,
+        };
+        UsersAPI.updateStatus(data).then((response) => {
+          component.getData();
+        });
+      } else if (params.column.field == "Admin") {
+        let component = this;
+        let data = {
+          update: "admin",
+          username: params.row.username,
+        };
+        UsersAPI.updateStatus(data).then((response) => {
+          component.getData();
+        });
+      } else if (params.column.field == "super_admin") {
+        let component = this;
+        let data = {
+          update: "super_admin",
+          username: params.row.username,
+        };
+        UsersAPI.updateStatus(data).then((response) => {
+          component.getData();
+        });
+      }
     },
   },
 };
